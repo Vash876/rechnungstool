@@ -2,11 +2,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
+import fs from 'fs';
 import helmet from 'helmet';
 import path from 'path';
-import fs from 'fs';
 
-import { errorHandler } from './middleware/errorHandler';
 import authRoutes from './routes/auth';
 import customerRoutes from './routes/customers';
 import invoiceRoutes from './routes/invoices';
