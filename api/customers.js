@@ -30,7 +30,12 @@ module.exports = async (req, res) => {
         return res.status(200).json(customers);
         
       case 'POST':
-        const { company, firstName, lastName, email, phone, address } = req.body;
+        const { company, firstName, lastName, email, phone, address, city, postalCode, country } = req.body;
+        
+        // Validate required fields
+        if (!firstName || !lastName || !email) {
+          return res.status(400).json({ error: 'Missing required fields: firstName, lastName, email' });
+        }
         
         // Generate customer number
         const customerCount = await prisma.customer.count();
@@ -44,7 +49,10 @@ module.exports = async (req, res) => {
             lastName,
             email,
             phone,
-            address
+            address,
+            city,
+            postalCode,
+            country
           }
         });
         

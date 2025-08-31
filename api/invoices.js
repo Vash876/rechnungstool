@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
         return res.status(200).json(invoices);
         
       case 'POST':
-        const { customerId, invoiceDate, dueDate, taxRate, items, notes, status } = req.body;
+        const { customerId, date, dueDate, taxRate, items, notes, status, totalNet, totalTax, totalGross } = req.body;
         
         // Validate required fields
         if (!customerId || !items || !Array.isArray(items) || items.length === 0) {
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
         }
         
         // Validate and parse dates
-        const parsedInvoiceDate = invoiceDate ? new Date(invoiceDate) : new Date();
+        const parsedInvoiceDate = date ? new Date(date) : new Date();
         const parsedDueDate = dueDate ? new Date(dueDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
         
         if (isNaN(parsedInvoiceDate.getTime()) || isNaN(parsedDueDate.getTime())) {
@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
         
         for (const item of items) {
           const quantity = parseFloat(item.quantity) || 0;
-          const price = parseFloat(item.price) || 0;
+          const price = parseFloat(item.unitPrice || item.price) || 0;
           
           if (!item.description || quantity <= 0 || price < 0) {
             return res.status(400).json({ error: 'Invalid item data' });
@@ -67,33 +67,40 @@ module.exports = async (req, res) => {
           validatedItems.push({
             description: item.description,
             quantity,
-            price,
+            unitPrice: price,
             total: itemTotal
           });
         }
         
+        // Use frontend-calculated totals if provided, otherwise calculate
+        const finalTotalNet = totalNet !== undefined ? parseFloat(totalNet) : subtotal;
         const validatedTaxRate = parseFloat(taxRate) || 19;
-        const taxAmount = subtotal * (validatedTaxRate / 100);
-        const total = subtotal + taxAmount;
+        const finalTotalTax = totalTax !== undefined ? parseFloat(totalTax) : finalTotalNet * (validatedTaxRate / 100);
+        const finalTotalGross = totalGross !== undefined ? parseFloat(totalGross) : finalTotalNet + finalTotalTax;
         
         // Generate invoice number
         const invoiceCount = await prisma.invoice.count();
-        const invoiceNumber = `RE${String(invoiceCount + 1).padStart(4, '0')}`;
+        const invoiceNumber = invoiceCount + 1;
         
         const newInvoice = await prisma.invoice.create({
           data: {
             customerId,
             invoiceNumber,
-            invoiceDate: parsedInvoiceDate,
+            date: parsedInvoiceDate,
             dueDate: parsedDueDate,
-            subtotal,
+            totalNet: finalTotalNet,
+            totalTax: finalTotalTax,
+            totalGross: finalTotalGross,
             taxRate: validatedTaxRate,
-            taxAmount,
-            total,
             notes: notes || '',
             status: status || 'DRAFT',
             items: {
-              create: validatedItems
+              create: validatedItems.map(item => ({
+                description: item.description,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                total: item.total
+              }))
             }
           },
           include: {
