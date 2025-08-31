@@ -93,8 +93,12 @@ export const invoiceAPI = {
   },
   
   getDefaults: async () => {
-    const response = await api.get('/invoices/defaults');
-    return response.data;
+    // Return hardcoded defaults instead of API call
+    return {
+      taxRate: 19,
+      paymentDue: 30,
+      status: 'DRAFT'
+    };
   },
   
   getById: async (id: string) => {
@@ -133,8 +137,12 @@ export const quoteAPI = {
   },
   
   getDefaults: async () => {
-    const response = await api.get('/quotes/defaults');
-    return response.data;
+    // Return hardcoded defaults instead of API call
+    return {
+      taxRate: 19,
+      validDays: 30,
+      status: 'DRAFT'
+    };
   },
   
   getById: async (id: string) => {
