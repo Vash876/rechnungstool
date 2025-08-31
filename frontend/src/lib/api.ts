@@ -1,7 +1,15 @@
 import axios from 'axios'
 
+// In production (Vercel), use relative path. In development, use localhost
+const getBaseURL = () => {
+  if (import.meta.env.PROD) {
+    return '/api'
+  }
+  return import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+}
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json'
   }
