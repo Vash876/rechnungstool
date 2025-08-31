@@ -146,7 +146,7 @@
                 class="w-24 h-24 border-2 border-gray-300 rounded-lg overflow-hidden"
               >
                 <img
-                  :src="`http://localhost:3000/api/uploads/${settings.logo}`"
+                  :src="getImageUrl(settings.logo)"
                   alt="Logo"
                   class="w-full h-full object-contain"
                 >
@@ -566,6 +566,12 @@ export default {
       }, 3000)
     }
 
+    const getImageUrl = (imagePath) => {
+      if (!imagePath) return ''
+      const baseUrl = import.meta.env.PROD ? '' : 'http://localhost:3000'
+      return `${baseUrl}/api/uploads/${imagePath}`
+    }
+
     onMounted(() => {
       loadSettings()
     })
@@ -580,7 +586,8 @@ export default {
       saveSettings,
       resetSettings,
       handleLogoUpload,
-      removeLogo
+      removeLogo,
+      getImageUrl
     }
   }
 }

@@ -47,7 +47,7 @@
           <div class="flex items-start space-x-4">
             <img 
               v-if="companySettings.logo" 
-              :src="`http://localhost:3000/api/uploads/${companySettings.logo}`" 
+              :src="getImageUrl(companySettings.logo)" 
               :alt="companySettings.name"
               class="h-16 w-auto object-contain"
             />
@@ -363,6 +363,12 @@ const getStatusText = (status: string) => {
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('de-DE')
+}
+
+const getImageUrl = (imagePath: string) => {
+  if (!imagePath) return ''
+  const baseUrl = import.meta.env.PROD ? '' : 'http://localhost:3000'
+  return `${baseUrl}/api/uploads/${imagePath}`
 }
 
 const formatCurrency = (amount: number) => {

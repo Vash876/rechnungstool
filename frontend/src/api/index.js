@@ -1,8 +1,16 @@
 import axios from 'axios'
 
+// Get base URL - use relative URL in production, localhost in development  
+const getBaseURL = () => {
+  if (import.meta.env.PROD) {
+    return '/api'
+  }
+  return 'http://localhost:3000/api'
+}
+
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: getBaseURL(),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
