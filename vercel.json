@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd frontend && NPM_CONFIG_OPTIONAL=true npm install --include=dev && npm run build-no-check",
+  "buildCommand": "npm install && npx prisma generate && npx prisma db push && cd frontend && NPM_CONFIG_OPTIONAL=true npm install --include=dev && npm run build-no-check",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
