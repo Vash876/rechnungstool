@@ -3,11 +3,6 @@
   "buildCommand": "prisma generate && cd frontend && npm install && npx vite build",
   "outputDirectory": "frontend/dist",
   "installCommand": "npm install",
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
