@@ -1,0 +1,48 @@
+{
+  "name": "rechnungstool-desktop",
+  "version": "1.0.0",
+  "description": "Desktop App für Rechnungs- und Angebotstool",
+  "main": "electron-main.js",
+  "scripts": {
+    "electron": "electron .",
+    "electron-dev": "electron . --dev",
+    "build": "electron-builder",
+    "dist": "npm run build",
+    "pack": "electron-builder --dir",
+    "setup": "npm install && cd ../backend && npm install && npx prisma generate"
+  },
+  "build": {
+    "appId": "com.handwerk.rechnungstool",
+    "productName": "Rechnungstool",
+    "directories": {
+      "output": "dist"
+    },
+    "extraResources": [
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": ["**/*", "!dist/**/*", "!.env", "!dev.db*", "!uploads/**/*"]
+      }
+    ],
+    "files": [
+      "electron-main.js",
+      "preload.js",
+      "../frontend/dist/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Rechnungstool"
+    }
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {},
+  "keywords": ["rechnungen", "angebote", "handwerk", "desktop"]
+}
