@@ -274,9 +274,9 @@
 <script setup lang="ts">
 import { invoiceAPI, settingsAPI } from '@/services/api'
 import {
-  ArrowLeftIcon,
-  DocumentArrowDownIcon,
-  PencilIcon
+    ArrowLeftIcon,
+    DocumentArrowDownIcon,
+    PencilIcon
 } from '@heroicons/vue/24/outline'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
