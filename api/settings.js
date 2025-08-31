@@ -39,8 +39,8 @@ module.exports = async (req, res) => {
               vatId: '',
               bankAccount: 'IBAN: DE12 3456 7890 1234 5678 90\nBIC: GENODEF1ABC',
               defaultTaxRate: 19,
-              invoicePrefix: 'R-',
-              quotePrefix: 'A-',
+              invoicePrefix: 'RE',
+              quotePrefix: 'AG',
               paymentTerms: 'Zahlbar innerhalb von 14 Tagen ohne Abzug.',
               logoPath: null
             }
@@ -52,14 +52,20 @@ module.exports = async (req, res) => {
       case 'PUT':
         const updateData = req.body;
         
-        const updatedSettings = await prisma.settings.upsert({
-          where: { id: 1 }, // Assuming single settings record
-          update: updateData,
-          create: {
-            id: 1,
-            ...updateData
-          }
-        });
+        // Get the first (and should be only) settings record
+        const existingSettings = await prisma.settings.findFirst();
+        
+        let updatedSettings;
+        if (existingSettings) {
+          updatedSettings = await prisma.settings.update({
+            where: { id: existingSettings.id },
+            data: updateData
+          });
+        } else {
+          updatedSettings = await prisma.settings.create({
+            data: updateData
+          });
+        }
         
         return res.status(200).json(updatedSettings);
         
@@ -69,6 +75,14 @@ module.exports = async (req, res) => {
     }
   } catch (error) {
     console.error('Settings API error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code
+    });
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };

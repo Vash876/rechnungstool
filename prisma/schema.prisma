@@ -161,7 +161,12 @@ model Settings {
   taxNumber     String?
   vatId         String?
   bankAccount   String?
+  defaultTaxRate Float?  @default(19)
+  invoicePrefix String?  @default("RE")
+  quotePrefix   String?  @default("AG")
+  paymentTerms  String?
   logo          String?
+  logoPath      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
