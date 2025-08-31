@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm install && prisma generate && cd frontend && npm install && npm run build-no-check",
+  "buildCommand": "npm install && prisma generate && npx vite build frontend",
   "outputDirectory": "frontend/dist",
   "installCommand": "npm install",
   "rewrites": [
