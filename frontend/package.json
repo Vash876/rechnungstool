@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "build-no-check": "vite build",
+    "build-no-check": "npx vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
     "vercel-build": "npm run build"
