@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "build-no-check": "npx vite build",
+    "build-no-check": "vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
     "vercel-build": "npm run build"
@@ -19,7 +19,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^next",
+    "@tailwindcss/vite": "^4.1.0",
     "@types/node": "^24.3.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "tailwindcss": "^4.1.12",
