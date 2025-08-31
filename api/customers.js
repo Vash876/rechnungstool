@@ -32,8 +32,13 @@ module.exports = async (req, res) => {
       case 'POST':
         const { company, firstName, lastName, email, phone, address } = req.body;
         
+        // Generate customer number
+        const customerCount = await prisma.customer.count();
+        const customerNumber = `KD${String(customerCount + 1).padStart(4, '0')}`;
+        
         const newCustomer = await prisma.customer.create({
           data: {
+            customerNumber,
             company,
             firstName,
             lastName,
