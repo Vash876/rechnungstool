@@ -1,15 +1,16 @@
-import cors from 'cors';
-import dotenv from 'dotenv';
-import express from 'express';
-import rateLimit from 'express-rate-limit';
-import helmet from 'helmet';
+const cors = require('cors');
+const dotenv = require('dotenv');
+const express = require('express');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
-import { errorHandler } from '../src/middleware/errorHandler';
-import authRoutes from '../src/routes/auth';
-import customerRoutes from '../src/routes/customers';
-import invoiceRoutes from '../src/routes/invoices';
-import quoteRoutes from '../src/routes/quotes';
-import settingsRoutes from '../src/routes/settings';
+// Import routes using require for CommonJS compatibility
+const { errorHandler } = require('../src/middleware/errorHandler');
+const authRoutes = require('../src/routes/auth');
+const customerRoutes = require('../src/routes/customers'); 
+const invoiceRoutes = require('../src/routes/invoices');
+const quoteRoutes = require('../src/routes/quotes');
+const settingsRoutes = require('../src/routes/settings');
 
 dotenv.config();
 
@@ -72,5 +73,10 @@ app.get('/', (req, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// For Vercel, export the app
-export default app;
+// For Vercel serverless functions, we need to export a handler
+const handler = (req: any, res: any) => {
+  return app(req, res);
+};
+
+// Default export for Vercel
+module.exports = handler;
