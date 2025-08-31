@@ -6,12 +6,13 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "build:frontend": "cd frontend && npm install && npm run build",
     "start": "node dist/index.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:deploy": "prisma migrate deploy",
-    "vercel-build": "prisma generate && prisma migrate deploy && npm run build"
+    "vercel-build": "prisma generate && prisma migrate deploy && npm run build:frontend"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
