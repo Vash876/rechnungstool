@@ -1,8 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm install && prisma generate && cd frontend && npm ci && npm run build-no-check",
+  "buildCommand": "npm ci --only=production && npx prisma generate && cd frontend && npm ci --only=production && FORCE_COLOR=0 npm run build 2>&1",
   "outputDirectory": "frontend/dist",
-  "installCommand": "npm install",
+  "installCommand": "npm ci --only=production",
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
