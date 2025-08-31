@@ -57,12 +57,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/customers', customerRoutes);
-app.use('/api/invoices', invoiceRoutes);
-app.use('/api/quotes', quoteRoutes);
-app.use('/api/settings', settingsRoutes);
+// Routes - no /api prefix needed since we're already under /api/*
+app.use('/auth', authRoutes);
+app.use('/customers', customerRoutes);
+app.use('/invoices', invoiceRoutes);
+app.use('/quotes', quoteRoutes);
+app.use('/settings', settingsRoutes);
+
+// Health check endpoint for debugging
+app.get('/', (req, res) => {
+  res.json({ message: 'API is running', timestamp: new Date().toISOString() });
+});
 
 // Error handling middleware
 app.use(errorHandler);
