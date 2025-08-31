@@ -1,10 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd frontend && NPM_CONFIG_OPTIONAL=true npm ci --include=dev && npm run build-no-check",
+  "buildCommand": "npm install --include=dev && prisma generate && cd frontend && npm ci && npm run build-no-check",
   "outputDirectory": "frontend/dist",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./frontend"
+  ]
 }
